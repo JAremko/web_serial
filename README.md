@@ -1,1 +1,1 @@
-# web_serial
+# https://jaremko.github.io/web_serial/
