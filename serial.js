@@ -2,51 +2,6 @@ let port;
 let writer;
 
 document.addEventListener('DOMContentLoaded', initializeApp);
-
-function initializeApp() {
-    if ("serial" in navigator) {
-        document.getElementById('appContainer').innerHTML =
-            '<button id="connect" class="button is-link">Connect to Serial Device</button>';
-        document.getElementById('connect').addEventListener('click', connectSerial);
-    } else {
-        displayNotSupportedError();
-    }
-}
-
-function displayNotSupportedError() {
-    document.getElementById('appContainer').innerHTML =
-        '<div class="notification is-danger">Web Serial API is not supported in this browser. ' +
-        'Please check <a href="https://caniuse.com/web-serial" target="_blank">browser compatibility</a>.</div>';
-}
-
-async function connectSerial() {
-    try {
-        port = await navigator.serial.requestPort();
-        await port.open({ baudRate: 115200 });
-        writer = port.writable.getWriter();
-        console.log('Connected to the serial port');
-        displayConfigUpload();
-    } catch (err) {
-        console.error('There was an error opening the serial port: ', err);
-    }
-}
-
-function displayConfigUpload() {
-    document.getElementById('appContainer').innerHTML =
-        '<input type="file" id="configUpload" class="button is-info" />' +
-        '<div id="dynamicButtons"></div>';
-    document.getElementById('configUpload').addEventListener('change', handleConfigUpload);
-}
-
-function handleConfigUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = e => generateButtons(parseConfigToJSON(e.target.result));
-        reader.readAsText(file);
-    }
-}
-
 async function sendCommand(byteArray) {
     if (writer) {
         await writer.write(new Uint8Array(byteArray));
@@ -153,7 +108,7 @@ function hexStringToByteArray(hexString) {
     return hexString.split(' ').map(s => parseInt(s, 16));
 }
 
-// Initialization and Event Handlers
+
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
@@ -176,7 +131,7 @@ function displayNotSupportedError() {
                              'Please check <a href="https://caniuse.com/web-serial" target="_blank">browser compatibility</a>.</div>';
 }
 
-// Serial Connection
+
 async function connectSerial() {
     try {
         port = await navigator.serial.requestPort();
@@ -189,7 +144,7 @@ async function connectSerial() {
     }
 }
 
-// Config Upload
+
 function displayConfigUpload() {
     const appContainer = document.getElementById('appContainer');
     appContainer.innerHTML = '<input type="file" id="configUpload" class="button is-info" />' +
